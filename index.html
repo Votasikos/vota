@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Odpočet do Nového Roku</title>
+
+  <style>
+    /* Načtení vlastního fontu Helveticaboldextended */
+    @font-face {
+      font-family: 'Helvetica Bold Extended'; /* Jméno fontu */
+      src: url('files/helveticaboldextended.ttf') format('truetype'); /* Relativní cesta k fontu */
+    }
+
+    body {
+      font-family: 'Helvetica Bold Extended', sans-serif; /* Použití vlastního fontu */
+      text-align: center;
+      background-color: #000;
+      color: white;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .countdown {
+      display: flex;
+      flex-direction: column;
+      font-size: 5rem;
+      gap: 10px;
+    }
+    .time-box {
+      text-align: center;
+    }
+    .separator {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="countdown">
+    <div id="countdown-text">Načítání...</div>
+  </div>
+
+  <script>
+    function formatTimeUnit(unit) {
+      return String(unit).padStart(2, '0'); // Formátování na 2 číslice
+    }
+
+    function updateCountdown() {
+      const now = new Date();
+      const nextYear = new Date(now.getFullYear() + 1, 0, 1); // Na začátek příštího roku
+      const diff = nextYear - now;
+
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      // Aktualizace zobrazení v textu s mezerami mezi čísly a zkratkami
+      const countdownText = `${formatTimeUnit(hours)} h ${formatTimeUnit(minutes)} m ${formatTimeUnit(seconds)} s`;
+      document.getElementById('countdown-text').textContent = countdownText;
+    }
+
+    // Aktualizace každou sekundu
+    setInterval(updateCountdown, 1000);
+
+    // Inicializace
+    updateCountdown();
+  </script>
+</body>
+</html>
