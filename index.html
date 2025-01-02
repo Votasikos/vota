@@ -1,73 +1,97 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Odpočet do Nového Roku</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Odpočet do Nového roku</title>
+    <!-- Odkaz na font Roboto pro tělo stránky -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Arial Black', Arial, sans-serif;
+            margin: 0;
+            height: 100vh;
+            background-color: #00000000;
+            color: white;
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            overflow: hidden;
+            zoom: 90%;
+        }
 
-  <style>
-    /* Načtení vlastního fontu Helveticaboldextended */
-    @font-face {
-      font-family: 'font1'; /* Jméno fontu */
-      src: url('files/helveticaboldextended.ttf') format('truetype'); /* Relativní cesta k fontu */
-    }
+        /* Černý obdélník pro odpočet a popisek */
+        .countdown-container {
+            background-color: #000000af; /* Černé pozadí */
+            padding: 20px;
+            box-shadow: none; /* Odebrán stín */
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            border-radius: 0px;
+        }
 
-    body {
-      font-family: "font1"; /* Použití vlastního fontu */
-      text-align: center;
-      background-color: #000;
-      color: white;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    .countdown {
-      display: flex;
-      flex-direction: column;
-      font-size: 5rem;
-      gap: 10px;
-    }
-    .time-box {
-      text-align: center;
-    }
-    .separator {
-      font-size: 1.5rem;
-      font-weight: bold;
-    }
-  </style>
+
+
+        /* Styly pro odpočet */
+        #countdown {
+            font-size: 6em; /* Zvýšená velikost pro odpočet */
+            font-weight: black;
+            text-align: center;
+        }
+
+        /* Styly pro popisek s fontem Ubuntu */
+        .zone-info {
+            font-size: 2em; /* Zvýšená velikost pro popisek */
+            font-family: 'Arial Black', sans-serif; /* Použití fontu Ubuntu */
+            text-align: center;
+            text-align: justify;
+            font-weight: 500;
+            font-display: swap; /* Zabránění rozmazání při načítání fontu */
+            text-rendering: optimizeLegibility; /* Zlepšení vykreslování textu */
+            margin-top: 0px; /* Malý odstup mezi popiskem a odpočtem */
+        }
+    </style>
 </head>
 <body>
-  <div class="countdown">
-    <div id="countdown-text">Načítání...</div>
-  </div>
+    <div class="countdown-container">
+        <div class="zone-info"></div>
+        <div id="countdown"></div>
 
-  <script>
-    function formatTimeUnit(unit) {
-      return String(unit).padStart(2, '0'); // Formátování na 2 číslice
-    }
+    </div>
 
-    function updateCountdown() {
-      const now = new Date();
-      const nextYear = new Date(now.getFullYear() + 1, 0, 1); // Na začátek příštího roku
-      const diff = nextYear - now;
+    <script>
+        // Nastav si tuto zónu a čas pro odpočet
+        const targetDate = "2026-01-01T00:00:00"; // Změň tuto hodnotu podle potřeby
+        const timezoneName = "Bombaj, Indie"; // Změň tuto hodnotu podle potřeby
+        const timezoneAbbreviation = "IST"; // Změň tuto hodnotu podle potřeby
 
-      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+        document.addEventListener('DOMContentLoaded', () => {
+            // Zobrazíme odpočet pro vybranou časovou zónu
+            const countdownContainer = document.getElementById('countdown');
+            const zoneInfo = document.querySelector('.zone-info');
+            zoneInfo.innerHTML = `${timezoneName} (${timezoneAbbreviation})`;
 
-      // Aktualizace zobrazení v textu s mezerami mezi čísly a zkratkami
-      const countdownText = `${formatTimeUnit(hours)} h ${formatTimeUnit(minutes)} m ${formatTimeUnit(seconds)} s`;
-      document.getElementById('countdown-text').textContent = countdownText;
-    }
+            // Aktualizace odpočtu pro vybranou časovou zónu
+            setInterval(() => {
+                updateCountdown(countdownContainer, new Date(targetDate));
+            }, 1000);
+        });
 
-    // Aktualizace každou sekundu
-    setInterval(updateCountdown, 1000);
+        // Funkce pro aktualizaci odpočtu
+        function updateCountdown(countdownElement, targetDate) {
+            const now = new Date();
+            const timeLeft = targetDate - now;
 
-    // Inicializace
-    updateCountdown();
-  </script>
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = String(Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+            const minutes = String(Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+            const seconds = String(Math.floor((timeLeft % (1000 * 60)) / 1000)).padStart(2, '0');
+
+            countdownElement.innerHTML = `${hours}:${minutes}:${seconds}`;
+        }
+    </script>
 </body>
 </html>
